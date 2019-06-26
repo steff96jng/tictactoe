@@ -1,9 +1,9 @@
 from enum import Enum, auto
 
 class Color(Enum):
-    EMPTY = '-'
-    X = 'x'
-    O = 'o'
+    EMPTY = 0
+    X = 1
+    O = 2
 
 class State(Enum):
     TURN_X = auto()
@@ -19,9 +19,9 @@ class Board:
         self.__activePlayer = Color.X
         self.__lastAcvitePlayer = Color.EMPTY
         self.__state = State.TURN_X
-        self.__board =  [['-','-','-']  # 0
-                        ,['-','-','-']  # 1
-                        ,['-','-','-']] # 2
+        self.__board =  [[0, 0, 0]  # 0
+                        ,[0, 0, 0]  # 1
+                        ,[0, 0, 0]] # 2
 
 
     def active_player(self):
@@ -39,6 +39,9 @@ class Board:
 
 
     def make_move(self, color: Color, n: int):
+        """
+
+        """
         y = int(n / 3)
         x = n % 3
         self.make_turn(color, x, y)
@@ -63,7 +66,7 @@ class Board:
             self.__activePlayer = Color.O
         else:
             self.__activePlayer = Color.X
-        
+
         self.__update_state()
         return True
 
@@ -72,8 +75,22 @@ class Board:
         """
         Print the game board
         """
+        def map_char(row):
+            for c in row:
+                ch = ''
+                if c == Color.EMPTY:
+                    ch = '-'
+                elif c == Color.X:
+                    ch = 'x'
+                else:
+                    ch = 'o'
+
+                print(ch + ' ', end='')
+            print('\n', end='')
+
+
         for row in range(len(self.__board)):
-            print(*self.__board[row])            
+            map_char(self.__activePlayer[row])
 
 
     def get_board(self):
