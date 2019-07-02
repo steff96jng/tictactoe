@@ -78,9 +78,9 @@ class Board:
         def map_char(row):
             for c in row:
                 ch = ''
-                if c == Color.EMPTY:
+                if c == Color.EMPTY.value:
                     ch = '-'
-                elif c == Color.X:
+                elif c == Color.X.value:
                     ch = 'x'
                 else:
                     ch = 'o'
@@ -90,7 +90,7 @@ class Board:
 
 
         for row in range(len(self.__board)):
-            map_char(self.__activePlayer[row])
+            map_char(self.__board[row])
 
 
     def get_board(self):
@@ -157,3 +157,5 @@ class Board:
         return (self.__board[1][1] != Color.EMPTY.value and
             (self.__board[0][0] == self.__board[1][1] and self.__board[1][1] == self.__board[2][2]
             or self.__board[0][2] == self.__board[1][1] and self.__board[1][1] == self.__board[2][0]))
+
+
