@@ -15,13 +15,13 @@ class BasePlayer:
     self.symbol = symbol
 
   def make_move(self, ttt: TicTacToe):
-    raise NotImplementedError
+    pass
 
   def update(self, ttt: TicTacToe):
-    raise NotImplementedError
+    pass
 
   def update_history(self, ttt: TicTacToe):
-    raise NotImplementedError
+    pass
 
 
 class HumanPlayer(BasePlayer):
@@ -65,7 +65,7 @@ class RandomPlayer(BasePlayer):
 
 
 class AgentPlayer(BasePlayer):
-  def __init__(self, epsilon = 0.5, alpha = 0.5):
+  def __init__(self, epsilon = 0.3, alpha = 0.5, debug = False):
     """
     parameters:
 
@@ -73,25 +73,60 @@ class AgentPlayer(BasePlayer):
 
     alpha: learning rate
     """
+    self.debug = debug
     self.history = []
     self.epsilon = epsilon
     self.alpha = alpha
     self.model = self.__build_model()
 
   def update_history(self, ttt: TicTacToe):
-    self.history.append(ttt.get_state())
+    result = 0
+    if ttt.game_over() and ttt.is_draw():
+      result = 0
+    elif ttt.game_over() and ttt.winner == self.symbol:
+      result = 1
+    else:
+      result = -1
+
+    self.history.append((ttt.get_state(), result))
 
   def make_move(self, ttt: TicTacToe):
+    def rnd_move():
+      while True:
+        coord = np.random.randint(3, size=2)
+        x = coord[0]
+        y = coord[1]
+
+        if ttt.make_move(x,y, self.symbol) or ttt.game_over():
+          return
+
     if np.random.rand() < self.epsilon:
-      return random.randrange(LENGTH * LENGTH)
+      rnd_move()
 
     state = ttt.get_state()
     one_hot = self.one_hot_encoded(state, ttt)
-    values = self.model.predict(one_hot)
-    return np.argmax(values)
 
-  def update(self, ttt: TicTacToe):
-    pass # todo - training here
+    values = self.model.predict(np.asarray([one_hot]))
+    max = np.argmax(values)
+    x = max % 3
+    y = max // 3
+    if  ttt.make_move(x, y, self.symbol):
+      return
+    else:
+      rnd_move()
+
+
+  def train(self, ttt: TicTacToe):
+    states = []
+    q_values = []
+
+    for game_state in self.history:
+      state, result = game_state
+      states.append(self.one_hot_encoded(state, ttt))
+      q_values.append(result)
+
+    self.model.fit(np.asarray(states), np.asarray(q_values), epochs=10, batch_size=len(states))
+
 
   def one_hot_encoded(self, state: [int], ttt: TicTacToe):
     """
@@ -126,9 +161,9 @@ class AgentPlayer(BasePlayer):
 
   def __build_model(self):
     model = Sequential()
-    model.add(Dense(units=9, activation='relu', input_dim=19)) # input layer
-    model.add(Dense(units=9, activation='relu')) #
-    model.add(Dense(units=9, activation='sigmoid')) #
-    model.add(Dense(uints=9, activation='linear')) # output layer
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.add(Dense(units=128, activation='relu', input_dim=19)) # input layer
+    model.add(Dense(units=64, activation='relu')) #
+    model.add(Dense(units=64, activation='relu')) #
+    model.add(Dense(units=32, activation='relu')) # output layer
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
     return model

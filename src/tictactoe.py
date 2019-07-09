@@ -71,6 +71,12 @@ class TicTacToe:
     self.turns += 1
     return True
 
+  def reset(self):
+    self.board = np.zeros((LENGTH, LENGTH))
+    self.winner = None
+    self.ended = False
+    self.turns = 0
+
   def draw_board(self):
     for y in range(LENGTH):
       for x in range(LENGTH):
