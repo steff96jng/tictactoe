@@ -8,7 +8,7 @@ from player import HumanPlayer, RandomPlayer, AgentPlayer
 if __name__ == "__main__":
   debug = False
   ttt = tictactoe.TicTacToe()
-  p1 = HumanPlayer() # change this player to the player you like
+  p1 = RandomPlayer() # change this player to the player you like
   p2 = AgentPlayer()
 
   p1.set_symbol(ttt.x)
@@ -20,7 +20,7 @@ if __name__ == "__main__":
   stat_history = []
   print("Start Training")
   while True:
-    for i in range(1):
+    for i in range(1000):
       while not ttt.game_over():
         if debug:
           ttt.draw_board()

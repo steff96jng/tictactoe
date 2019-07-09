@@ -65,7 +65,7 @@ class RandomPlayer(BasePlayer):
 
 
 class AgentPlayer(BasePlayer):
-  def __init__(self, epsilon = 0.3, alpha = 0.5, debug = False):
+  def __init__(self, epsilon = 0.7, alpha = 0.5, debug = False):
     """
     parameters:
 
