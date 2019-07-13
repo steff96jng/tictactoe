@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import jsonpickle
 from stats_proc import EpochData, StatsProcessor
 
-filename = "data_export/stats_current_uwwqfcsrccepsakbnwde.json"
+filename = "data_export/stats_current_iivduiphpxavylccjsgz.json"
 
 def read_json_file(path) -> str:
     f = open(path, "r")
@@ -53,10 +53,30 @@ def plot_invalid_moves(data):
     plt.legend()
     plt.show()
 
+
+def plot_invalid_moves_relative(data): 
+    epoch_data = data.epoch_data
+    x_invalid_rel = []
+    o_invalid_rel = []
+    x_o_invalid_rel = []
+
+    for ed in epoch_data:
+        x_invalid_rel.append(ed.data["x_illegal_rel"])
+        o_invalid_rel.append(ed.data["y_illegal_rel"])
+        x_o_invalid_rel.append(ed.data["x_illegal_rel"] + ed.data["y_illegal_rel"])
+
+    plt.plot(x_invalid_rel, label="x_invalid_%")
+    plt.plot(o_invalid_rel, label="o_invalid_%")
+    plt.plot(x_o_invalid_rel, label="x_o_invalid_%")
+    plt.legend()
+    plt.ylabel('Illegale Spielzüge in %')
+    plt.show()
+    
+
 content = read_json_file(filename)
 data = jsonpickle.decode(content)
 
-plot_invalid_moves(data)
+plot_invalid_moves_relative(data)
 
 
 
