@@ -19,8 +19,11 @@ if __name__ == "__main__":
   stats = {'x': 0, 'o': 0, 'draw': 0}
   stat_history = []
   print("Start Training")
+  x = 1000
+  y = 10
+
   while True:
-    for i in range(1000):
+    for i in range(x):
       while not ttt.game_over():
         if debug:
           ttt.draw_board()
@@ -38,7 +41,7 @@ if __name__ == "__main__":
       if debug:
         ttt.draw_board()
 
-      if (i % 200) == 0:
+      if (i % 200) == 0 or i == (x - 1):
         print("Round", i, "finished")
 
       if ttt.winner == None:
@@ -54,11 +57,23 @@ if __name__ == "__main__":
     # p1.train(ttt)
     # p1.reset_history()
 
-    p2.train(ttt)
+    if y > 0:
+      p2.train(ttt)
+      y -= 1
+
     p2.reset_history()
 
     stat_history.append(stats)
     stats = {'x': 0, 'o': 0, 'draw': 0}
+    overall_stats = { 'x': 0, 'o': 0, 'draw': 0}
 
     for stat in stat_history:
-      print(stat)
+      overall_stats['x'] += stat['x']
+      overall_stats['o'] += stat['o']
+      overall_stats['draw'] += stat['draw']
+      # print(stat)
+
+    overall_stats['x'] = overall_stats['x'] / (len(stat_history) * x)
+    overall_stats['o'] = overall_stats['o'] / (len(stat_history) * x)
+    overall_stats['draw'] = overall_stats['draw'] / (len(stat_history) * x)
+    print(overall_stats)
