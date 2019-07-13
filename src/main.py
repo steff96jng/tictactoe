@@ -6,12 +6,12 @@ import stats_proc
 from player import HumanPlayer, RandomPlayer, AgentPlayer
 
 if __name__ == "__main__":
-    current_stats_proc = stats_proc.StatsProcessor('current_')
-    overall_stats_proc = stats_proc.StatsProcessor('overall_')
+    current_stats_proc = stats_proc.StatsProcessor("current_")
+    overall_stats_proc = stats_proc.StatsProcessor("overall_")
     debug = False
     ttt = tictactoe.TicTacToe()
-    p1 = AgentPlayer(name = "p1")  # change this player to the player you like
-    p2 = AgentPlayer(name = "p2")
+    p1 = AgentPlayer(name="p1")  # change this player to the player you like
+    p2 = AgentPlayer(name="p2")
 
     p1.set_symbol(ttt.x)
     p2.set_symbol(ttt.o)
@@ -26,15 +26,7 @@ if __name__ == "__main__":
 
     try:
         while True:
-            stats = {
-                "x": 0,
-                "o": 0,
-                "draw": 0,
-                "x_illegal": 0,
-                "y_illegal": 0,
-                "tried_moves": 0,
-                "stat_id": stat_id
-            }
+            stats = {"x": 0, "o": 0, "draw": 0}
             for i in range(x):
                 while not ttt.game_over():
                     if debug:
@@ -63,12 +55,8 @@ if __name__ == "__main__":
                 elif ttt.winner == ttt.o:
                     stats["o"] = stats["o"] + 1
 
-                stats["tried_moves"] += ttt.tried_moves
                 ttt.reset()
                 active_player = p1
-
-            stats["x_illegal"] = p1.illegal_moves
-            stats["y_illegal"] = p2.illegal_moves
 
             p1.train(ttt)
             p1.reset_history()
@@ -77,22 +65,12 @@ if __name__ == "__main__":
             p2.reset_history()
 
             stat_history.append(stats.copy())
-            overall_stats = {
-                "x": 0,
-                "o": 0,
-                "draw": 0,
-                "x_illegal": 0,
-                "y_illegal": 0,
-                "tried_moves": 0,
-            }
+            overall_stats = {"x": 0, "o": 0, "draw": 0}
 
             for stat in stat_history:
                 overall_stats["x"] += stat["x"]
                 overall_stats["o"] += stat["o"]
                 overall_stats["draw"] += stat["draw"]
-                overall_stats["x_illegal"] += stat["x_illegal"]
-                overall_stats["y_illegal"] += stat["y_illegal"]
-                overall_stats["tried_moves"] += stat["tried_moves"]
 
             overall_stats["x"] = overall_stats["x"] / (len(stat_history) * x)
             overall_stats["o"] = overall_stats["o"] / (len(stat_history) * x)
@@ -101,13 +79,11 @@ if __name__ == "__main__":
             stats["x"] = stats["x"] / x
             stats["o"] = stats["o"] / x
             stats["draw"] = stats["draw"] / x
-            stats["x_illegal_rel"] = stats["x_illegal"] / stats["tried_moves"]
-            stats["y_illegal_rel"] = stats["y_illegal"] / stats["tried_moves"]
 
             current_stats_proc.append_epoch_data(stats)
             stat_id += 1
-            #print("overall", overall_stats)
-            #print("current", stats)
+            print("overall", overall_stats)
+            print("current", stats)
 
     except KeyboardInterrupt:
         print("Recognized [Ctrl + C]. Terminating.")

@@ -8,8 +8,6 @@ from tensorflow.python.keras.models import Sequential, load_model, print_functio
 from tensorflow.python.keras import optimizers
 from tensorflow.keras.models import load_model
 
-import tensorflow.python.keras.utils as keras_utils
-
 import numpy as np
 
 from tictactoe import TicTacToe, LENGTH
@@ -72,7 +70,7 @@ class RandomPlayer(BasePlayer):
 class AgentPlayer(BasePlayer):
     model_stats = None
 
-    def __init__(self, epsilon=0.7, alpha=0.5, debug=False, name='player'):
+    def __init__(self, epsilon=0.7, alpha=0.5, debug=False, name="player"):
         """
         parameters:
 
@@ -87,7 +85,7 @@ class AgentPlayer(BasePlayer):
         self.model = self.__build_model()
         self.illegal_moves = 0
         self.name = name
-        self.model_stats = stats_proc.StatsProcessor('model_' + name + '_')
+        self.model_stats = stats_proc.StatsProcessor("model_" + name + "_")
 
     def update_history(self, ttt: TicTacToe):
         result = 0
@@ -101,7 +99,7 @@ class AgentPlayer(BasePlayer):
         self.history.append((ttt.get_state(), result))
 
     def make_move(self, ttt: TicTacToe):
-        def rnd_move():
+        if np.random.rand() > self.epsilon:
             while True:
                 coord = np.random.randint(3, size=2)
                 x = coord[0]
@@ -110,21 +108,25 @@ class AgentPlayer(BasePlayer):
                 if ttt.make_move(x, y, self.symbol) or ttt.game_over():
                     return
 
-        if np.random.rand() > self.epsilon:
-            rnd_move()
-
         state = ttt.get_state()
         one_hot = self.one_hot_encoded(state, ttt)
+        values = self.model.predict(np.asarray([one_hot]))[0]
 
-        values = self.model.predict(np.asarray([one_hot]))
-        max = np.argmax(values)
-        x = max % 3
-        y = max // 3
+        high = -1000  # value of field
+        field = -1000  # index of field
+
+        for i in range(len(state)):  # select best move
+            if state[i] == 0:
+                if values[i] > high:
+                    high = values[i].copy()
+                    field = i
+
+        x = field % 3
+        y = field // 3
         if ttt.make_move(x, y, self.symbol):
             return
         else:
-            self.illegal_moves += 1
-            rnd_move()
+            raise Exception("dafuq?")
 
     def train(self, ttt: TicTacToe):
         states = []
@@ -135,9 +137,8 @@ class AgentPlayer(BasePlayer):
             states.append(self.one_hot_encoded(state, ttt))
             q_values.append(result)
 
-        
         self.model.fit(
-            np.asarray(states), np.asarray(q_values), epochs=10, batch_size=len(states)
+            np.asarray(states), np.asarray(q_values), epochs=5, batch_size=len(states)
         )
 
     def one_hot_encoded(self, state: [int], ttt: TicTacToe):
@@ -174,11 +175,14 @@ class AgentPlayer(BasePlayer):
 
     def __build_model(self):
         model = Sequential()
+        # fmt: off
         model.add(Dense(units=128, activation="relu", input_dim=19))  # input layer
-        model.add(Dense(units=64, activation="relu"))   #
-        model.add(Dense(units=64, activation="relu"))   #
-        model.add(Dense(units=9, activation="relu"))    # output layer: Use 9 units, because we have 9 game-fields
+        model.add(Dense(units=256, activation="relu"))   #
+        model.add(Dense(units=140, activation="relu"))   #
+        model.add(Dense(units=60, activation='relu'))
+        model.add(Dense(units=9))    # output layer: Use 9 units, because we have 9 game-fields
         model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
+        # fmt: on
         return model
 
     def stop_training(self):
