@@ -165,9 +165,9 @@ class AgentPlayer(BasePlayer):
     def __build_model(self):
         model = Sequential()
         model.add(Dense(units=128, activation="relu", input_dim=19))  # input layer
-        model.add(Dense(units=64, activation="relu"))  #
-        model.add(Dense(units=64, activation="relu"))  #
-        model.add(Dense(units=9, activation="relu"))  # output layer
+        model.add(Dense(units=64, activation="relu"))   #
+        model.add(Dense(units=64, activation="relu"))   #
+        model.add(Dense(units=9, activation="relu"))    # output layer: Use 9 units, because we have 9 game-fields
         model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
         return model
 
