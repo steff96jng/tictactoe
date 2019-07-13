@@ -178,8 +178,8 @@ class AgentPlayer(BasePlayer):
         model.add(Dense(units=256, activation="relu"))   #
         model.add(Dense(units=140, activation="relu"))   #
         model.add(Dense(units=60, activation='relu'))
-        model.add(Dense(units=9))    # output layer: Use 9 units, because we have 9 game-fields
-        model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
+        model.add(Dense(units=9))  # output layer: Use 9 units, because we have 9 game-fields
+        model.compile(optimizer='adam', loss="mean_squared_error", metrics=["accuracy"])
         # fmt: on
         return model
 
