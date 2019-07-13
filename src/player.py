@@ -8,8 +8,6 @@ from tensorflow.python.keras.models import Sequential, load_model, print_functio
 from tensorflow.python.keras import optimizers
 from tensorflow.keras.models import load_model
 
-import tensorflow.python.keras.utils as keras_utils
-
 import numpy as np
 
 from tictactoe import TicTacToe, LENGTH
