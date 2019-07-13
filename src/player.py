@@ -1,10 +1,15 @@
 import random
 
 import tensorflow as tf
+import jsonpickle
+import stats_proc
 from tensorflow.python.keras.layers import Dense, Flatten
-from tensorflow.python.keras.models import Sequential, load_model
+from tensorflow.python.keras.models import Sequential, load_model, print_function
 from tensorflow.python.keras import optimizers
 from tensorflow.keras.models import load_model
+
+import tensorflow.python.keras.utils as keras_utils
+
 import numpy as np
 
 from tictactoe import TicTacToe, LENGTH
@@ -65,6 +70,8 @@ class RandomPlayer(BasePlayer):
 
 
 class AgentPlayer(BasePlayer):
+    model_stats = None
+
     def __init__(self, epsilon=0.7, alpha=0.5, debug=False):
         """
         parameters:
@@ -79,6 +86,7 @@ class AgentPlayer(BasePlayer):
         self.alpha = alpha
         self.model = self.__build_model()
         self.illegal_moves = 0
+        self.model_stats = stats_proc.StatsProcessor('model_')
 
     def update_history(self, ttt: TicTacToe):
         result = 0
@@ -126,6 +134,7 @@ class AgentPlayer(BasePlayer):
             states.append(self.one_hot_encoded(state, ttt))
             q_values.append(result)
 
+        
         self.model.fit(
             np.asarray(states), np.asarray(q_values), epochs=10, batch_size=len(states)
         )

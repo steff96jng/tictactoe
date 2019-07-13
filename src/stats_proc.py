@@ -18,8 +18,8 @@ class StatsProcessor(object):
     session = ""
     epoch_data = []
 
-    def __init__(self):
-        self.session = randomString()
+    def __init__(self, prefix = ""):
+        self.session = prefix + randomString()
         self.start_new_epoch()
 
     def append_epoch_data(self, data):
@@ -37,7 +37,7 @@ class StatsProcessor(object):
         json_file = open(file_path, "w+")
         json_file.write(o2json(self))
         json_file.close()
-        print('Exported stats to ', json_file.name)
+        print('Exported stats to ', file_path)
 
     def start_new_epoch(self):
         self.epoch_data = []

@@ -6,8 +6,8 @@ import stats_proc
 from player import HumanPlayer, RandomPlayer, AgentPlayer
 
 if __name__ == "__main__":
-    current_stats_proc = stats_proc.StatsProcessor()
-    overall_stats_proc = stats_proc.StatsProcessor()
+    current_stats_proc = stats_proc.StatsProcessor('current_')
+    overall_stats_proc = stats_proc.StatsProcessor('overall_')
     debug = False
     ttt = tictactoe.TicTacToe()
     p1 = AgentPlayer()  # change this player to the player you like
@@ -22,6 +22,7 @@ if __name__ == "__main__":
     print("Start Training")
     x = 1000
     y = 1000
+    stat_id = 0
 
     try:
         while True:
@@ -32,6 +33,7 @@ if __name__ == "__main__":
                 "x_illegal": 0,
                 "y_illegal": 0,
                 "tried_moves": 0,
+                "stat_id": stat_id
             }
             for i in range(x):
                 while not ttt.game_over():
@@ -103,13 +105,19 @@ if __name__ == "__main__":
             stats["y_illegal_rel"] = stats["y_illegal"] / stats["tried_moves"]
 
             current_stats_proc.append_epoch_data(stats)
-
-            print("overall", overall_stats)
-            print("current", stats)
+            stat_id += 1
+            #print("overall", overall_stats)
+            #print("current", stats)
 
     except KeyboardInterrupt:
-        print("OH! A KEYBOARD INTERRUPT OCCURED!")
+        print("Recognized [Ctrl + C]. Terminating.")
         current_stats_proc.export_json()
+        p1.model_stats.export_json()
+        p2.model_stats.export_json()
+
     except:
         print("Another error occured. Terminating.")
-        
+        current_stats_proc.export_json()
+        p1.model_stats.export_json()
+        p2.model_stats.export_json()
+
