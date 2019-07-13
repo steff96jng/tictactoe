@@ -72,7 +72,7 @@ class RandomPlayer(BasePlayer):
 class AgentPlayer(BasePlayer):
     model_stats = None
 
-    def __init__(self, epsilon=0.7, alpha=0.5, debug=False):
+    def __init__(self, epsilon=0.7, alpha=0.5, debug=False, name='player'):
         """
         parameters:
 
@@ -86,7 +86,8 @@ class AgentPlayer(BasePlayer):
         self.alpha = alpha
         self.model = self.__build_model()
         self.illegal_moves = 0
-        self.model_stats = stats_proc.StatsProcessor('model_')
+        self.name = name
+        self.model_stats = stats_proc.StatsProcessor('model_' + name + '_')
 
     def update_history(self, ttt: TicTacToe):
         result = 0

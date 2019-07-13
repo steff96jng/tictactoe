@@ -10,8 +10,8 @@ if __name__ == "__main__":
     overall_stats_proc = stats_proc.StatsProcessor('overall_')
     debug = False
     ttt = tictactoe.TicTacToe()
-    p1 = AgentPlayer()  # change this player to the player you like
-    p2 = AgentPlayer()
+    p1 = AgentPlayer(name = "p1")  # change this player to the player you like
+    p2 = AgentPlayer(name = "p2")
 
     p1.set_symbol(ttt.x)
     p2.set_symbol(ttt.o)
