@@ -12,7 +12,6 @@ class TicTacToe:
         self.winner = None
         self.ended = False
         self.turns = 0
-        self.tried_moves = 0
 
     def is_empty(self, x: int, y: int) -> bool:
         return self.board[y, x] == self.empty
@@ -68,7 +67,6 @@ class TicTacToe:
         return self.ended and self.winner == None
 
     def make_move(self, x: int, y: int, player: int):
-        self.tried_moves += 1
         if x < 0 or x >= LENGTH or y < 0 or y >= LENGTH or not self.is_empty(x, y):
             return False
 
@@ -81,7 +79,6 @@ class TicTacToe:
         self.winner = None
         self.ended = False
         self.turns = 0
-        self.tried_moves = 0
 
     def draw_board(self):
         for y in range(LENGTH):

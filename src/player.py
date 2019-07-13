@@ -83,7 +83,6 @@ class AgentPlayer(BasePlayer):
         self.epsilon = epsilon
         self.alpha = alpha
         self.model = self.__build_model()
-        self.illegal_moves = 0
         self.name = name
         self.model_stats = stats_proc.StatsProcessor("model_" + name + "_")
 
@@ -171,7 +170,6 @@ class AgentPlayer(BasePlayer):
 
     def reset_history(self):
         self.history = []
-        self.illegal_moves = 0
 
     def __build_model(self):
         model = Sequential()
