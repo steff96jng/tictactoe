@@ -21,10 +21,12 @@ if __name__ == "__main__":
     stat_history = []
     print("Start Training")
     episodes = 1000
+    iteration = 0
     stat_id = 0
 
     try:
         while True:
+            iteration += 1
             stats = {"x": 0, "o": 0, "draw": 0}
             for i in range(episodes):
                 while not ttt.game_over():
@@ -85,6 +87,7 @@ if __name__ == "__main__":
             stat_id += 1
             print("overall", overall_stats)
             print("current", stats)
+            print("finished iteration", iteration)
 
     except KeyboardInterrupt:
         print("Recognized [Ctrl + C]. Terminating.")
