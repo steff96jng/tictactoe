@@ -10,6 +10,16 @@ def read_json_file(path) -> str:
     f.close()
     return content
 
+def median(list: list) -> float:
+    m = 0
+
+    for n in list:
+        m += n
+    
+    return m / len(list)
+    
+
+
 
 def plot_wins(data):
     x_player_win = []
@@ -35,6 +45,7 @@ def plot_invalid_moves(data):
     illegal_x = []
     illegal_o = []
     illegal_x_o = []
+    median_data = []
     epoch_data = data.epoch_data
 
 
@@ -43,11 +54,14 @@ def plot_invalid_moves(data):
         illegal_o.append(ed.data["x_illegal"])
         illegal_x.append(ed.data["y_illegal"])
         illegal_x_o.append(ed.data["x_illegal"] + ed.data["y_illegal"])
+        median_data.append(median(illegal_o + illegal_x))
+    
 
     plt.plot(tried_moves, label='tried_moves')
     plt.plot(illegal_o, label='illegal_o')
     plt.plot(illegal_x, label='illegal_x')
     plt.plot(illegal_x_o, label='illegal_x_o')
+    plt.plot(median_data, label='median')
     plt.ylabel('Illegale Spielzüge')
     plt.plot()
     plt.legend()
@@ -76,7 +90,7 @@ def plot_invalid_moves_relative(data):
 content = read_json_file(filename)
 data = jsonpickle.decode(content)
 
-plot_invalid_moves_relative(data)
+plot_invalid_moves(data)
 
 
 
