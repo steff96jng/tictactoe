@@ -132,8 +132,8 @@ class AgentPlayer(BasePlayer):
 
     def one_hot_encoded(self, state: [int], ttt: TicTacToe):
         """
-    one_hot_encoded returns the game state as one hot encoded
-    """
+        one_hot_encoded returns the game state as one hot encoded
+        """
         one_hot_state = []
 
         for field in state:
@@ -170,4 +170,14 @@ class AgentPlayer(BasePlayer):
         model.add(Dense(units=9, activation="relu"))  # output layer
         model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
         return model
+
+    def save_model(self, file: str):
+        self.model.save(file)
+
+    def load_model(self, file: str):
+        try:
+            self.model = tf.load_model(file)
+        except Exception as e:
+            print("Failed to load model from file", e)
+            raise
 
