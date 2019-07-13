@@ -20,13 +20,13 @@ if __name__ == "__main__":
 
     stat_history = []
     print("Start Training")
-    x = 1000
+    episodes = 1000
     stat_id = 0
 
     try:
         while True:
             stats = {"x": 0, "o": 0, "draw": 0}
-            for i in range(x):
+            for i in range(episodes):
                 while not ttt.game_over():
                     if debug:
                         ttt.draw_board()
@@ -44,7 +44,7 @@ if __name__ == "__main__":
                 if debug:
                     ttt.draw_board()
 
-                if (i % 200) == 0 or i == (x - 1):
+                if (i % 200) == 0 or i == (episodes - 1):
                     print(i)
 
                 if ttt.winner == None:
@@ -71,13 +71,15 @@ if __name__ == "__main__":
                 overall_stats["o"] += stat["o"]
                 overall_stats["draw"] += stat["draw"]
 
-            overall_stats["x"] = overall_stats["x"] / (len(stat_history) * x)
-            overall_stats["o"] = overall_stats["o"] / (len(stat_history) * x)
-            overall_stats["draw"] = overall_stats["draw"] / (len(stat_history) * x)
+            overall_stats["x"] = overall_stats["x"] / (len(stat_history) * episodes)
+            overall_stats["o"] = overall_stats["o"] / (len(stat_history) * episodes)
+            overall_stats["draw"] = overall_stats["draw"] / (
+                len(stat_history) * episodes
+            )
 
-            stats["x"] = stats["x"] / x
-            stats["o"] = stats["o"] / x
-            stats["draw"] = stats["draw"] / x
+            stats["x"] = stats["x"] / episodes
+            stats["o"] = stats["o"] / episodes
+            stats["draw"] = stats["draw"] / episodes
 
             current_stats_proc.append_epoch_data(stats)
             stat_id += 1
