@@ -21,7 +21,6 @@ if __name__ == "__main__":
     stat_history = []
     print("Start Training")
     x = 1000
-    y = 1000
     stat_id = 0
 
     try:
@@ -46,7 +45,7 @@ if __name__ == "__main__":
                     ttt.draw_board()
 
                 if (i % 200) == 0 or i == (x - 1):
-                    print("Round", i, "finished")
+                    print(i)
 
                 if ttt.winner == None:
                     stats["draw"] = stats["draw"] + 1
