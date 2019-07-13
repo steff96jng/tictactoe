@@ -171,12 +171,15 @@ class AgentPlayer(BasePlayer):
         model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
         return model
 
+    def stop_training(self):
+        self.epsilon = 0
+
     def save_model(self, file: str):
         self.model.save(file)
 
     def load_model(self, file: str):
         try:
-            self.model = tf.load_model(file)
+            self.model = tf.keras.models.load_model(file)
         except Exception as e:
             print("Failed to load model from file", e)
             raise
