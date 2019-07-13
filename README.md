@@ -17,8 +17,11 @@
 3. ```
     .\venv\Scripts\activate
     ```
-
 4. ```
+    pip install -r src/requirements.txt
+    ```
+
+5. ```
     deactivate  # don't exit until you're done using TensorFlow
     ```
 
@@ -35,6 +38,10 @@
     ```
 
 4. ```
+    pip install -r src/requirements.txt
+    ```
+
+5. ```
     deactivate  # don't exit until you're done using TensorFlow
     ```
 
