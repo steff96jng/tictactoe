@@ -70,7 +70,7 @@ class RandomPlayer(BasePlayer):
 class AgentPlayer(BasePlayer):
     model_stats = None
 
-    def __init__(self, epsilon=0.7, alpha=0.5, debug=False, name="player"):
+    def __init__(self, epsilon=0.7, debug=False, name="player"):
         """
         parameters:
 
