@@ -75,13 +75,10 @@ class AgentPlayer(BasePlayer):
         parameters:
 
         epsilon: greediness, probability of taking a random action instead of a greedy action
-
-        alpha: learning rate
         """
         self.debug = debug
         self.history = []
         self.epsilon = epsilon
-        self.alpha = alpha
         self.model = self.__build_model()
         self.name = name
         self.model_stats = stats_proc.StatsProcessor("model_" + name + "_")
