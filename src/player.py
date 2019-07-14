@@ -98,7 +98,7 @@ class AgentPlayer(BasePlayer):
         self.history.append((ttt.get_state(), result))
 
     def make_move(self, ttt: TicTacToe):
-        if np.random.rand() > self.epsilon:
+        if np.random.rand() < self.epsilon:
             while True:
                 coord = np.random.randint(3, size=2)
                 x = coord[0]
