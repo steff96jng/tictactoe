@@ -75,7 +75,7 @@ def plot_wins(data, datafile):
     plt.plot(rms_draw, label="Quadr. Mittel Unentschieden")
 
     plt.ylabel("Gewonnen in %")
-    plt.xlabel("Epochen x 1000")
+    plt.xlabel("Episoden x 1000")
     plt.title("Gewinnverteilung")
     
     
