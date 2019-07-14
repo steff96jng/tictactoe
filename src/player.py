@@ -20,10 +20,13 @@ class BasePlayer:
     def make_move(self, ttt: TicTacToe):
         pass
 
-    def update(self, ttt: TicTacToe):
+    def train(self, ttt: TicTacToe):
         pass
 
     def update_history(self, ttt: TicTacToe):
+        pass
+
+    def reset_history(self):
         pass
 
 
@@ -40,12 +43,6 @@ class HumanPlayer(BasePlayer):
             if ttt.make_move(x, y, self.symbol):
                 return
 
-    def update(self, ttt: TicTacToe):
-        pass
-
-    def update_history(self, ttt: TicTacToe):
-        pass
-
 
 class RandomPlayer(BasePlayer):
     def __init__(self):
@@ -59,12 +56,6 @@ class RandomPlayer(BasePlayer):
 
             if ttt.make_move(x, y, self.symbol):
                 return
-
-    def update(self, ttt: TicTacToe):
-        pass
-
-    def update_history(self, ttt: TicTacToe):
-        pass
 
 
 class AgentPlayer(BasePlayer):
