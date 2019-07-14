@@ -18,6 +18,7 @@
     .\venv\Scripts\activate
     ```
 4. ```
+    # Restore dependencies
     pip install -r src/requirements.txt
     ```
 
@@ -38,12 +39,15 @@
     ```
 
 4. ```
+    # Restore dependencies
     pip install -r src/requirements.txt
     ```
 
 5. ```
     deactivate  # don't exit until you're done using TensorFlow
     ```
+
+# Installing Tensorflow
 
 https://www.tensorflow.org/install/pip
 
