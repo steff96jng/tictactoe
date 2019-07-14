@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # environment setup
     ttt = tictactoe.TicTacToe()
     p1 = AgentPlayer(name="p1", epsilon=0.7)
-    p2 = AgentPlayer(name="p2", epsilon=0.1)
+    p2 = AgentPlayer(name="p2", epsilon=0.5)
 
     p1.set_symbol(ttt.x)
     p2.set_symbol(ttt.o)
