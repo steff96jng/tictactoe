@@ -9,9 +9,10 @@ if __name__ == "__main__":
     current_stats_proc = stats_proc.StatsProcessor("current_")
     overall_stats_proc = stats_proc.StatsProcessor("overall_")
     debug = False
+    # environment setup
     ttt = tictactoe.TicTacToe()
-    p1 = AgentPlayer(name="p1")  # change this player to the player you like
-    p2 = AgentPlayer(name="p2")
+    p1 = AgentPlayer(name="p1", epsilon=0.7)
+    p2 = AgentPlayer(name="p2", epsilon=0.1)
 
     p1.set_symbol(ttt.x)
     p2.set_symbol(ttt.o)
@@ -40,6 +41,7 @@ if __name__ == "__main__":
                     else:
                         active_player = p1
 
+                # append game state
                 p1.update_history(ttt)
                 p2.update_history(ttt)
 
@@ -59,12 +61,14 @@ if __name__ == "__main__":
                 ttt.reset()
                 active_player = p1
 
+            # training
             p1.train(ttt)
             p1.reset_history()
 
             p2.train(ttt)
             p2.reset_history()
 
+            # statistics
             stat_history.append(stats.copy())
             overall_stats = {"x": 0, "o": 0, "draw": 0}
 

@@ -61,13 +61,14 @@ class RandomPlayer(BasePlayer):
 class AgentPlayer(BasePlayer):
     model_stats = None
 
-    def __init__(self, epsilon=0.7, debug=False, name="player"):
+    def __init__(self, epsilon=0.7, name="player"):
         """
         parameters:
 
         epsilon: greediness, probability of taking a random action instead of a greedy action
+
+        name: name of the player, used for generating stats
         """
-        self.debug = debug
         self.history = []
         self.epsilon = epsilon
         self.model = self.__build_model()
@@ -75,17 +76,18 @@ class AgentPlayer(BasePlayer):
         self.model_stats = stats_proc.StatsProcessor("model_" + name + "_")
 
     def update_history(self, ttt: TicTacToe):
-        result = 0
+        reward = 0
         if ttt.game_over() and ttt.is_draw():
-            result = 0
+            reward = 0
         elif ttt.game_over() and ttt.winner == self.symbol:
-            result = 1
+            reward = 1
         else:
-            result = -1
+            reward = -1
 
-        self.history.append((ttt.get_state(), result))
+        self.history.append((ttt.get_state(), reward))
 
     def make_move(self, ttt: TicTacToe):
+        # explore - make a random move
         if np.random.rand() < self.epsilon:
             while True:
                 coord = np.random.randint(3, size=2)
@@ -95,12 +97,13 @@ class AgentPlayer(BasePlayer):
                 if ttt.make_move(x, y, self.symbol) or ttt.game_over():
                     return
 
+        # let the network predict the next move
         state = ttt.get_state()
         one_hot = self.one_hot_encoded(state, ttt)
         values = self.model.predict(np.asarray([one_hot]))[0]
 
         high = -1000  # value of field
-        field = -1000  # index of field
+        field = -1  # index of field
 
         for i in range(len(state)):  # select best move
             if state[i] == 0:
@@ -128,7 +131,7 @@ class AgentPlayer(BasePlayer):
             np.asarray(states), np.asarray(q_values), epochs=5, batch_size=len(states)
         )
 
-    def one_hot_encoded(self, state: [int], ttt: TicTacToe):
+    def one_hot_encoded(self, state, ttt: TicTacToe):
         """
         one_hot_encoded returns the game state as one hot encoded
         """
@@ -163,8 +166,8 @@ class AgentPlayer(BasePlayer):
         model = Sequential()
         # fmt: off
         model.add(Dense(units=128, activation="relu", input_dim=19))  # input layer
-        model.add(Dense(units=256, activation="relu"))   #
-        model.add(Dense(units=140, activation="relu"))   #
+        model.add(Dense(units=256, activation="relu"))
+        model.add(Dense(units=140, activation="relu"))
         model.add(Dense(units=60, activation='relu'))
         model.add(Dense(units=9))  # output layer: Use 9 units, because we have 9 game-fields
         model.compile(optimizer='adam', loss="mean_squared_error", metrics=["accuracy"])
